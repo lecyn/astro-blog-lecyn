@@ -1,0 +1,21 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+	const shares = await getCollection('shares');
+	return shares.map((share) => ({
+		params: { slug: share.id },
+		props: share,
+	}));
+}
+type Props = CollectionEntry<'shares'>;
+
+const share = Astro.props;
+const { Content } = await render(share);
+---
+
+<BlogPost {...share.data}>
+	<Content />
+</BlogPost>
