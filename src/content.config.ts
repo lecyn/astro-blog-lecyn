@@ -16,6 +16,17 @@ const blog = defineCollection({
 	}),
 });
 
+const notes = defineCollection({
+	loader: glob({ base: "./src/content/notes", pattern: "**/*.{md,mdx}" }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		pubDate: z.coerce.date(),
+		updatedDate: z.coerce.date().optional(),
+		heroImage: z.string().optional(),
+	}),
+});
+
 const shares = defineCollection({
 	loader: glob({ base: "./src/content/shares", pattern: "**/*.{md,mdx}" }),
 	schema: z.object({
@@ -27,4 +38,4 @@ const shares = defineCollection({
 	}),
 });
 
-export const collections = { blog, shares };
+export const collections = { blog, notes, shares };
