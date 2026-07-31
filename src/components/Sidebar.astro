@@ -20,10 +20,8 @@ import { SITE_TITLE } from '../consts';
 
 <style>
 	.sidebar {
-		flex-shrink: 0;
-		width: 260px;
-		position: sticky;
-		top: calc(3.5em + 1rem);
+		max-width: 260px;
+		margin: 0 auto 2rem;
 	}
 	.card {
 		background: rgb(22, 27, 34);
@@ -59,7 +57,7 @@ import { SITE_TITLE } from '../consts';
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.info {
-		padding: 1rem 1rem 1.25rem;
+		padding: 1rem;
 	}
 	.name {
 		font-size: 1.2rem;
@@ -88,8 +86,8 @@ import { SITE_TITLE } from '../consts';
 
 	@media (max-width: 768px) {
 		.sidebar {
-			width: 100%;
-			position: static;
+			max-width: 100%;
+			margin: 0 auto 1rem;
 		}
 		.card {
 			display: flex;
