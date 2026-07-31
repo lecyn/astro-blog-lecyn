@@ -17,6 +17,15 @@ const shares = (await getCollection('shares')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
+			@media (min-width: 1101px) {
+				.layout-wrapper {
+					display: flex;
+					justify-content: center;
+					align-items: flex-start;
+					gap: 1.5rem;
+					padding: 0 1em;
+				}
+			}
 			main {
 				width: 960px;
 			}
@@ -88,7 +97,8 @@ const shares = (await getCollection('shares')).sort(
 	</head>
 	<body>
 		<Header />
-		<Sidebar />
+		<div class="layout-wrapper">
+			<Sidebar />
 		<main>
 			<section>
 				<ul>
@@ -108,6 +118,7 @@ const shares = (await getCollection('shares')).sort(
 				</ul>
 			</section>
 		</main>
+		</div>
 		<Footer />
 	</body>
 </html>

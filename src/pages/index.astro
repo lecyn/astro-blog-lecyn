@@ -10,10 +10,22 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 <html lang="zh-CN">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			@media (min-width: 1101px) {
+				.layout-wrapper {
+					display: flex;
+					justify-content: center;
+					align-items: flex-start;
+					gap: 1.5rem;
+					padding: 0 1em;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
-		<Sidebar />
+		<div class="layout-wrapper">
+			<Sidebar />
 		<main>
 			<h1>🧑‍🚀 Hello, Astronaut!</h1>
 			<p>
@@ -47,6 +59,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
 			</p>
 		</main>
+		</div>
 		<Footer />
 	</body>
 </html>

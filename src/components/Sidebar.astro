@@ -20,11 +20,11 @@ import { SITE_TITLE } from '../consts';
 
 <style>
 	.sidebar {
-		position: fixed;
-		left: 2rem;
-		top: calc(3.5em + 1rem);
 		width: 260px;
-		z-index: 5;
+		flex-shrink: 0;
+		position: sticky;
+		top: 50vh;
+		transform: translateY(-50%);
 	}
 	.card {
 		background: rgb(22, 27, 34);
@@ -89,47 +89,7 @@ import { SITE_TITLE } from '../consts';
 
 	@media (max-width: 1100px) {
 		.sidebar {
-			position: static;
-			max-width: 260px;
-			margin: 0 auto 2rem;
-		}
-	}
-
-	@media (max-width: 768px) {
-		.sidebar {
-			position: static;
-			width: 100%;
-			margin-bottom: 1rem;
-		}
-		.card {
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-			padding: 0.75rem;
-		}
-		.avatar-link {
-			flex-shrink: 0;
-			width: 64px;
-			height: 64px;
-			border-radius: 50%;
-		}
-		.avatar-img {
-			border-radius: 50%;
-			aspect-ratio: 1;
-		}
-		.info {
-			padding: 0;
-			text-align: left;
-			flex: 1;
-		}
-		.name {
-			font-size: 1rem;
-		}
-		.divider {
-			margin: 0.3rem 0;
-		}
-		.typewriter-container {
-			font-size: 0.8rem;
+			display: none;
 		}
 	}
 </style>
