@@ -3,3 +3,4 @@
 
 export const SITE_TITLE = "Lecyn's Blog";
 export const SITE_DESCRIPTION = "一个普通的学生，爱好自己感兴趣的世界！";
+export const SITE_LOGO = "/font-image.png";

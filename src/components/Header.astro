@@ -1,11 +1,11 @@
 ---
 import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, SITE_LOGO } from '../consts';
 ---
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<a href="/" class="logo"><img src={SITE_LOGO} alt={SITE_TITLE} /></a>
 		<div class="internal-links">
 			<HeaderLink href="/">主页</HeaderLink>
 			<HeaderLink href="/blog">博客</HeaderLink>
@@ -43,14 +43,18 @@ import { SITE_TITLE } from '../consts';
 		background: rgb(13, 17, 23);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
 	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
+	.logo {
+		display: flex;
+		align-items: center;
 		text-decoration: none;
+		border-bottom: none !important;
+	}
+	.logo img {
+		height: 2em;
+		width: auto;
+	}
+	.logo:hover {
+		opacity: 0.8;
 	}
 	nav {
 		display: flex;
