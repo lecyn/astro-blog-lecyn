@@ -20,8 +20,11 @@ import { SITE_TITLE } from '../consts';
 
 <style>
 	.sidebar {
-		max-width: 260px;
-		margin: 0 auto 2rem;
+		position: fixed;
+		left: 2rem;
+		top: calc(3.5em + 1rem);
+		width: 260px;
+		z-index: 5;
 	}
 	.card {
 		background: rgb(22, 27, 34);
@@ -84,10 +87,19 @@ import { SITE_TITLE } from '../consts';
 		50% { opacity: 0; }
 	}
 
+	@media (max-width: 1100px) {
+		.sidebar {
+			position: static;
+			max-width: 260px;
+			margin: 0 auto 2rem;
+		}
+	}
+
 	@media (max-width: 768px) {
 		.sidebar {
-			max-width: 100%;
-			margin: 0 auto 1rem;
+			position: static;
+			width: 100%;
+			margin-bottom: 1rem;
 		}
 		.card {
 			display: flex;
