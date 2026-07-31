@@ -27,6 +27,9 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
+<!-- RSS Feed -->
+<link rel="alternate" type="application/rss+xml" title={SITE_TITLE || title} href="/rss.xml" />
+
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="title" content={title} />
