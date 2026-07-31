@@ -4,12 +4,17 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 export async function GET(context) {
 	const blogPosts = await getCollection("blog");
+	const notes = await getCollection("notes");
 	const shares = await getCollection("shares");
 
 	const allItems = [
 		...blogPosts.map((post) => ({
 			...post.data,
 			link: `/blog/${post.id}/`,
+		})),
+		...notes.map((note) => ({
+			...note.data,
+			link: `/notes/${note.id}/`,
 		})),
 		...shares.map((share) => ({
 			...share.data,
