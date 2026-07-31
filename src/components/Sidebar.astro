@@ -1,0 +1,162 @@
+---
+import { SITE_TITLE } from '../consts';
+---
+
+<aside class="sidebar">
+	<div class="card">
+		<a href="https://www.lecyn.cn" class="avatar-link" aria-label={SITE_TITLE}>
+			<img src="/profile-picture.jpg" alt={SITE_TITLE} class="avatar-img" />
+		</a>
+		<div class="info">
+			<div class="name">Lecyn</div>
+			<div class="divider"></div>
+			<div class="typewriter-container">
+				<span class="typewriter" id="typewriter" data-text="三重面向的灵魂啊，敬请聆听我的发问……" data-speed="80" data-delete-speed="50" data-pause-time="2000"></span>
+				<span class="cursor">|</span>
+			</div>
+		</div>
+	</div>
+</aside>
+
+<style>
+	.sidebar {
+		flex-shrink: 0;
+		width: 260px;
+		position: sticky;
+		top: calc(3.5em + 1rem);
+	}
+	.card {
+		background: rgb(22, 27, 34);
+		border-radius: 12px;
+		overflow: hidden;
+		text-align: center;
+	}
+	.avatar-link {
+		display: block;
+		position: relative;
+		overflow: hidden;
+	}
+	.avatar-img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+	.avatar-link:hover .avatar-img {
+		transform: scale(1.05);
+	}
+	.avatar-link::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0);
+		transition: background 0.3s ease;
+		pointer-events: none;
+	}
+	.avatar-link:hover::after {
+		background: rgba(0, 0, 0, 0.25);
+	}
+	.info {
+		padding: 1rem 1rem 1.25rem;
+	}
+	.name {
+		font-size: 1.2rem;
+		font-weight: 700;
+		color: rgb(var(--black));
+	}
+	.divider {
+		width: 20px;
+		height: 4px;
+		background: var(--accent);
+		border-radius: 2px;
+		margin: 0.6rem auto;
+	}
+	.typewriter-container {
+		font-size: 0.85rem;
+		color: rgb(var(--gray));
+		min-height: 1.5em;
+	}
+	.cursor {
+		animation: blink 1s step-end infinite;
+	}
+	@keyframes blink {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0; }
+	}
+
+	@media (max-width: 768px) {
+		.sidebar {
+			width: 100%;
+			position: static;
+		}
+		.card {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			padding: 0.75rem;
+		}
+		.avatar-link {
+			flex-shrink: 0;
+			width: 64px;
+			height: 64px;
+			border-radius: 50%;
+		}
+		.avatar-img {
+			border-radius: 50%;
+			aspect-ratio: 1;
+		}
+		.info {
+			padding: 0;
+			text-align: left;
+			flex: 1;
+		}
+		.name {
+			font-size: 1rem;
+		}
+		.divider {
+			margin: 0.3rem 0;
+		}
+		.typewriter-container {
+			font-size: 0.8rem;
+		}
+	}
+</style>
+
+<script>
+	const el = document.getElementById("typewriter");
+	if (el) {
+		const text = el.dataset.text || "";
+		const speed = parseInt(el.dataset.speed) || 80;
+		const deleteSpeed = parseInt(el.dataset.deleteSpeed) || 50;
+		const pauseTime = parseInt(el.dataset.pauseTime) || 2000;
+
+		let i = 0;
+		let isDeleting = false;
+
+		function type() {
+			if (!isDeleting) {
+				if (i < text.length) {
+					el.textContent = text.substring(0, i + 1);
+					i++;
+					setTimeout(type, speed);
+				} else {
+					isDeleting = true;
+					setTimeout(type, pauseTime);
+				}
+			} else {
+				if (i > 0) {
+					el.textContent = text.substring(0, i - 1);
+					i--;
+					setTimeout(type, deleteSpeed);
+				} else {
+					isDeleting = false;
+					setTimeout(type, speed);
+				}
+			}
+		}
+
+		type();
+	}
+</script>
