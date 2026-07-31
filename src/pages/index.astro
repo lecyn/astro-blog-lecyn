@@ -28,6 +28,15 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					margin-right: 0;
 				}
 			}
+			@media (max-width: 1100px) {
+				.layout-wrapper {
+					display: flex;
+					flex-direction: column;
+				}
+				.layout-wrapper::after {
+					display: none;
+				}
+			}
 		</style>
 	</head>
 	<body>
