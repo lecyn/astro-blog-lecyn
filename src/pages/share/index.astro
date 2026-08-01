@@ -119,6 +119,9 @@ const shares = (await getCollection('shares')).sort(
 				align-self: flex-end;
 			}
 
+			ul li:first-child .img-wrapper::after {
+				display: none;
+			}
 			ul li:first-child a {
 				flex-direction: column;
 				gap: 0.75rem;

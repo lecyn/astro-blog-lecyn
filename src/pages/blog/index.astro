@@ -121,6 +121,9 @@ const posts = (await getCollection('blog')).sort(
 			}
 
 			/* 置顶文章：纵向布局 */
+			ul li:first-child .img-wrapper::after {
+				display: none;
+			}
 			ul li:first-child a {
 				flex-direction: column;
 				gap: 0.75rem;
