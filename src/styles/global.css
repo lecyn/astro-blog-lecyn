@@ -96,6 +96,9 @@ a:hover {
 p {
 	margin-bottom: 1em;
 }
+.prose {
+	font-size: 0.9em;
+}
 .prose p {
 	margin-bottom: 2em;
 }
