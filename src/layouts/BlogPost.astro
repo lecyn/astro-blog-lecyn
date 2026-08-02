@@ -4,6 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 
 interface Props {
@@ -12,9 +13,10 @@ interface Props {
 	pubDate: Date;
 	updatedDate?: Date;
 	heroImage?: string;
+	headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
 ---
 
 <html lang="zh-CN">
@@ -28,7 +30,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 					align-items: flex-start;
 					padding: 0 1em;
 				}
-				.layout-wrapper::after {
+				.layout-wrapper.no-toc::after {
 					content: '';
 					width: 260px;
 					flex-shrink: 0;
@@ -116,7 +118,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
 	<body>
 		<Header />
-		<div class="layout-wrapper">
+		<div class={`layout-wrapper${headings.length === 0 ? ' no-toc' : ''}`}>
 			<Sidebar />
 		<main>
 			<article>
@@ -142,6 +144,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 			</article>
 		</main>
+			<TableOfContents headings={headings} />
 		</div>
 		<Footer />
 		<div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
