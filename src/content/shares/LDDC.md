@@ -5,8 +5,6 @@ pubDate: "Aug 2 2026"
 heroImage: "https://t.alcy.cc/pc"
 ---
 
-# LDDC-好用的歌词匹配工具
-
 ## 1. 项目链接
 
 > 项目仓库：https://github.com/chenmozhijin/LDDC
