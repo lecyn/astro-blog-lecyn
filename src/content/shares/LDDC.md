@@ -10,8 +10,11 @@ heroImage: "https://t.alcy.cc/pc"
 ## 1. 项目链接
 
 > 项目仓库：https://github.com/chenmozhijin/LDDC
+> 
 > 软件下载：https://github.com/chenmozhijin/LDDC/releases/latest
+> 
 > Wiki：https://github.com/chenmozhijin/LDDC/wiki
+> 
 > 推荐下载onefile版本，单文件不新增注册表，删掉文件即可完成删除。
 
 ## 2. 功能推荐
