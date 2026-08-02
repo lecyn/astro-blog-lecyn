@@ -1,5 +1,8 @@
 ---
 import { SITE_TITLE } from '../consts';
+import intros from '../data/intros.json';
+
+const intro = intros[Math.floor(Math.random() * intros.length)];
 ---
 
 <aside class="sidebar">
@@ -11,7 +14,7 @@ import { SITE_TITLE } from '../consts';
 			<div class="name">Lecyn</div>
 			<div class="divider"></div>
 			<div class="typewriter-container">
-				<span class="typewriter" id="typewriter" data-text="三重面向的灵魂啊，敬请聆听我的发问……" data-speed="80" data-delete-speed="50" data-pause-time="2000"></span>
+				<span class="typewriter" id="typewriter" data-text={intro} data-speed="80"></span>
 				<span class="cursor">|</span>
 			</div>
 		</div>
@@ -124,31 +127,13 @@ import { SITE_TITLE } from '../consts';
 	if (el) {
 		const text = el.dataset.text || "";
 		const speed = parseInt(el.dataset.speed) || 80;
-		const deleteSpeed = parseInt(el.dataset.deleteSpeed) || 50;
-		const pauseTime = parseInt(el.dataset.pauseTime) || 2000;
 
 		let i = 0;
-		let isDeleting = false;
-
 		function type() {
-			if (!isDeleting) {
-				if (i < text.length) {
-					el.textContent = text.substring(0, i + 1);
-					i++;
-					setTimeout(type, speed);
-				} else {
-					isDeleting = true;
-					setTimeout(type, pauseTime);
-				}
-			} else {
-				if (i > 0) {
-					el.textContent = text.substring(0, i - 1);
-					i--;
-					setTimeout(type, deleteSpeed);
-				} else {
-					isDeleting = false;
-					setTimeout(type, speed);
-				}
+			if (i < text.length) {
+				el.textContent = text.substring(0, i + 1);
+				i++;
+				setTimeout(type, speed);
 			}
 		}
 
