@@ -7,13 +7,12 @@ heroImage: "https://t.alcy.cc/pc"
 
 ## 1. 项目链接
 
-> 项目仓库：https://github.com/chenmozhijin/LDDC
-> 
-> 软件下载：https://github.com/chenmozhijin/LDDC/releases/latest
-> 
-> Wiki：https://github.com/chenmozhijin/LDDC/wiki
-> 
-> 推荐下载onefile版本，单文件不新增注册表，删掉文件即可完成删除。
+> 项目仓库：https://github.com/chenmozhijin/LDDC  
+> 软件下载：https://github.com/chenmozhijin/LDDC/releases/latest  
+> Wiki：https://github.com/chenmozhijin/LDDC/wiki  
+> 推荐下载onefile版本，单文件不新增注册表，删掉文件即可完成删除。  
+
+---
 
 ## 2. 功能推荐
 
@@ -31,6 +30,8 @@ heroImage: "https://t.alcy.cc/pc"
 - 歌词文件保存模式众多，可选镜像文件夹目录、歌曲所在目录、指定目录（不影响歌词嵌入）。
 - 歌词保存方式支持两种，一种是保存为单独歌词文件，一种是嵌入歌曲文件内。
 - 可选原文、译文、罗马音三种歌词类型（一般而言译文不支持逐字）
+
+---
 
 ## 3. 总结
 
