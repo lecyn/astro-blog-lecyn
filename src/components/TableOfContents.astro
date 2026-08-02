@@ -8,18 +8,22 @@ const { headings = [] } = Astro.props as { headings: Heading[] };
 const items = headings.filter((h) => h.depth <= 3);
 ---
 
-{items.length > 0 && (
-	<nav class="toc">
-		<div class="toc-title">目录</div>
-		<ul>
-			{items.map((h) => (
-				<li class={`toc-depth-${h.depth}`}>
-					<a href={`#${h.slug}`}>{h.text}</a>
-				</li>
-			))}
-		</ul>
-	</nav>
-)}
+<nav class="toc">
+	<div class="toc-card">
+		{items.length > 0 && (
+			<>
+				<div class="toc-title">目录</div>
+				<ul>
+					{items.map((h) => (
+						<li class={`toc-depth-${h.depth}`}>
+							<a href={`#${h.slug}`}>{h.text}</a>
+						</li>
+					))}
+				</ul>
+			</>
+		)}
+	</div>
+</nav>
 
 <style>
 	.toc {
@@ -30,6 +34,11 @@ const items = headings.filter((h) => h.depth <= 3);
 		max-height: calc(100vh - 5rem);
 		overflow-y: auto;
 		font-size: 0.85rem;
+	}
+	.toc-card {
+		background: rgb(22, 27, 34);
+		border-radius: 12px;
+		padding: 1rem;
 	}
 	.toc-title {
 		font-weight: 700;
@@ -42,22 +51,27 @@ const items = headings.filter((h) => h.depth <= 3);
 		padding: 0;
 	}
 	.toc li {
-		margin-bottom: 0.25rem;
-		line-height: 1.4;
+		border-radius: 4px;
+		transition: background 0.15s;
+	}
+	.toc li:hover {
+		background: rgba(255, 255, 255, 0.05);
+	}
+	.toc li a {
+		display: block;
+		padding: 0.2rem 0.3rem;
+		color: rgb(var(--gray));
+		text-decoration: none;
+		transition: color 0.15s;
+	}
+	.toc li:hover a {
+		color: rgb(var(--black));
 	}
 	.toc-depth-2 {
 		padding-left: 0.75rem;
 	}
 	.toc-depth-3 {
 		padding-left: 1.5rem;
-	}
-	.toc a {
-		color: rgb(var(--gray));
-		text-decoration: none;
-		transition: color 0.15s;
-	}
-	.toc a:hover {
-		color: var(--accent);
 	}
 
 	@media (max-width: 1200px) {

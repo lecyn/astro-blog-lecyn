@@ -30,11 +30,6 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 					align-items: flex-start;
 					padding: 0 1em;
 				}
-				.layout-wrapper.no-toc::after {
-					content: '';
-					width: 260px;
-					flex-shrink: 0;
-				}
 				main {
 					flex: 1;
 					min-width: 0;
@@ -118,7 +113,7 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 
 	<body>
 		<Header />
-		<div class={`layout-wrapper${headings.length === 0 ? ' no-toc' : ''}`}>
+		<div class="layout-wrapper">
 			<Sidebar />
 		<main>
 			<article>
