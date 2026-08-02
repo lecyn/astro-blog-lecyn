@@ -72,6 +72,29 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				padding: 1em;
 				color: rgb(var(--gray-dark));
 			}
+			.prose img {
+				cursor: pointer;
+			}
+
+			/* Lightbox */
+			.lightbox {
+				display: none;
+				position: fixed;
+				inset: 0;
+				z-index: 9999;
+				background: rgba(0, 0, 0, 0.9);
+				cursor: pointer;
+			}
+			.lightbox.active {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.lightbox img {
+				max-width: 90vw;
+				max-height: 90vh;
+				object-fit: contain;
+			}
 			.title {
 				margin-bottom: 1em;
 				padding: 1em 0;
@@ -121,5 +144,20 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		</main>
 		</div>
 		<Footer />
+		<div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
 	</body>
 </html>
+
+<script>
+	const lightbox = document.getElementById('lightbox');
+	const lightboxImg = document.getElementById('lightbox-img');
+	document.querySelectorAll('.prose img').forEach((img) => {
+		img.addEventListener('click', () => {
+			lightboxImg.src = img.src;
+			lightbox.classList.add('active');
+		});
+	});
+	lightbox.addEventListener('click', () => {
+		lightbox.classList.remove('active');
+	});
+</script>
