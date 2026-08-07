@@ -175,7 +175,7 @@ hr {
 
 /* Footnotes */
 sup a[data-footnote-ref] {
-	font-size: 0.5em;
+	font-size: 1.25em;
 	text-decoration: none;
 	scroll-margin-top: 50vh;
 }
