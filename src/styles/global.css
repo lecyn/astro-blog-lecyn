@@ -141,7 +141,6 @@ blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 0 0 0 20px;
 	margin: 0px;
-	font-size: 1.333em;
 }
 hr {
 	border: none;
@@ -172,4 +171,32 @@ hr {
 	clip-path: inset(50%);
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
+}
+
+/* Footnotes */
+sup a[data-footnote-ref] {
+	font-size: 0.75em;
+	text-decoration: none;
+	scroll-margin-top: 5rem;
+}
+
+.footnotes {
+	margin-top: 3em;
+	border-top: 1px solid rgb(var(--gray-light));
+	padding-top: 1em;
+	font-size: 0.85em;
+	color: rgb(var(--gray));
+}
+
+.footnotes ol {
+	padding-left: 1.5em;
+}
+
+.footnotes li {
+	margin-bottom: 0.5em;
+}
+
+.footnotes a[data-footnote-backref] {
+	text-decoration: none;
+	margin-left: 0.25em;
 }
