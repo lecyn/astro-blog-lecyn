@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../../components/BaseHead.astro';
+import StructuredData from '../../components/StructuredData.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Sidebar from '../../components/Sidebar.astro';
@@ -10,12 +11,23 @@ import FormattedDate from '../../components/FormattedDate.astro';
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const pageTitle = `博客 - ${SITE_TITLE}`;
+const pageDescription = `技术博文列表 — ${SITE_DESCRIPTION}`;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={pageTitle} description={pageDescription} />
+		<StructuredData type="WebSite" />
+		<StructuredData
+			type="BreadcrumbList"
+			breadcrumbs={[
+				{ name: '首页', url: new URL('/', Astro.site).href },
+				{ name: '博客', url: new URL('/blog/', Astro.site).href },
+			]}
+		/>
 		<style>
 			@media (min-width: 1101px) {
 				.layout-wrapper {
@@ -166,7 +178,7 @@ const posts = (await getCollection('blog')).sort(
 							<li>
 								<a href={`/blog/${post.id}/`}>
 									<div class="img-wrapper">
-										<img width={560} height={300} src={post.data.heroImage} alt="" />
+										<img width={560} height={300} src={post.data.heroImage} alt={post.data.title} />
 									</div>
 									<div class="card-info">
 										<h4 class="title">{post.data.title}</h4>

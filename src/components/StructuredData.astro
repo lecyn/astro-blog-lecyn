@@ -1,0 +1,90 @@
+---
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_AUTHOR } from '../consts';
+
+interface Props {
+	type: 'Article' | 'WebSite' | 'Person' | 'BreadcrumbList';
+	// Article fields
+	title?: string;
+	description?: string;
+	image?: string;
+	publishedTime?: Date;
+	modifiedTime?: Date;
+	category?: string;
+	url?: string;
+	// BreadcrumbList fields
+	breadcrumbs?: { name: string; url: string }[];
+}
+
+const {
+	type,
+	title,
+	description,
+	image,
+	publishedTime,
+	modifiedTime,
+	category,
+	url,
+	breadcrumbs,
+} = Astro.props;
+
+const siteUrl = String(Astro.site).replace(/\/+$/, '');
+
+let jsonLd: Record<string, unknown>;
+
+if (type === 'Article') {
+	jsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: title,
+		description: description,
+		image: image ? new URL(image, Astro.site).href : undefined,
+		author: {
+			'@type': 'Person',
+			name: SITE_AUTHOR,
+			url: siteUrl,
+		},
+		datePublished: publishedTime?.toISOString(),
+		dateModified: modifiedTime?.toISOString() || publishedTime?.toISOString(),
+		...(category ? { articleSection: category } : {}),
+		url: url || Astro.url.href,
+		publisher: {
+			'@type': 'Person',
+			name: SITE_AUTHOR,
+		},
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': url || Astro.url.href,
+		},
+	};
+} else if (type === 'WebSite') {
+	jsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: SITE_TITLE,
+		description: SITE_DESCRIPTION,
+		url: siteUrl,
+	};
+} else if (type === 'Person') {
+	jsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		name: SITE_AUTHOR,
+		url: siteUrl,
+	};
+} else if (type === 'BreadcrumbList') {
+	jsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: (breadcrumbs || []).map((item, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			name: item.name,
+			item: item.url,
+		})),
+	};
+}
+---
+
+{jsonLd && (
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+)}
