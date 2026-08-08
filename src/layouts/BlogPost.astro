@@ -205,7 +205,8 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 		}
 		a.addEventListener('click', (e) => {
 			e.preventDefault();
-			location.href = `/redirect?url=${encodeURIComponent(a.href)}`;
+			sessionStorage.setItem('redirect_url', a.href);
+			location.href = '/redirect';
 		});
 	});
 </script>

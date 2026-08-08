@@ -5,22 +5,6 @@ import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
 import { SITE_TITLE } from '../consts';
 
-const rawUrl = Astro.url.searchParams.get('url') || '';
-const url = decodeURIComponent(rawUrl);
-const isValidUrl = url && (url.startsWith('http://') || url.startsWith('https://'));
-
-let displayUrl = '';
-let hostname = '';
-if (isValidUrl) {
-	try {
-		const parsed = new URL(url);
-		hostname = parsed.hostname;
-		displayUrl = url.length > 80 ? url.slice(0, 80) + '...' : url;
-	} catch {
-		// invalid URL
-	}
-}
-
 const pageTitle = `即将离开 ${SITE_TITLE}`;
 ---
 
@@ -143,6 +127,10 @@ const pageTitle = `即将离开 ${SITE_TITLE}`;
 				color: rgb(var(--gray));
 				margin-top: 1.5em;
 			}
+			#valid-section { display: none; }
+			#invalid-section { display: none; }
+			#valid-section.active,
+			#invalid-section.active { display: block; }
 		</style>
 	</head>
 	<body>
@@ -153,32 +141,28 @@ const pageTitle = `即将离开 ${SITE_TITLE}`;
 				<div class="redirect-card">
 					<div class="redirect-icon">&#128279;</div>
 					<h1>即将离开本站</h1>
-					{
-						isValidUrl ? (
-							<>
-								<p>你正在访问一个外部链接，点击下方按钮将在<strong>新标签页</strong>中打开：</p>
-								<div class="url-display">
-									<span class="hostname">{hostname}</span>
-									<br />{displayUrl}
-								</div>
-								<div class="btn-group">
-									<a href={url} target="_blank" rel="noopener noreferrer" class="btn-continue">
-										继续访问 &#8599;
-									</a>
-									<a href="javascript:history.back()" class="btn-back">
-										返回上一页
-									</a>
-								</div>
-							</>
-						) : (
-							<>
-								<p>未提供有效的目标链接，请返回继续浏览。</p>
-								<div class="btn-group">
-									<a href="/" class="btn-continue">返回首页</a>
-								</div>
-							</>
-						)
-					}
+					<div id="valid-section">
+						<p>你正在访问一个外部链接，点击下方按钮将在<strong>新标签页</strong>中打开：</p>
+						<div class="url-display">
+							<span class="hostname" id="hostname-display"></span>
+							<br /><span id="url-display"></span>
+						</div>
+						<div class="btn-group">
+							<a id="continue-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-continue">
+								继续访问 &#8599;
+							</a>
+							<a href="javascript:history.back()" class="btn-back">
+								返回上一页
+							</a>
+						</div>
+					</div>
+					<div id="invalid-section">
+						<p>未提供有效的目标链接，请返回继续浏览。</p>
+						<div class="btn-group">
+							<a href="javascript:history.back()" class="btn-back">返回上一页</a>
+							<a href="/" class="btn-continue">返回首页</a>
+						</div>
+					</div>
 					<p class="warning">请注意保护个人隐私，本站不对站外内容负责。</p>
 				</div>
 			</main>
@@ -186,3 +170,25 @@ const pageTitle = `即将离开 ${SITE_TITLE}`;
 		<Footer />
 	</body>
 </html>
+
+<script>
+	const url = sessionStorage.getItem('redirect_url');
+	const validSection = document.getElementById('valid-section');
+	const invalidSection = document.getElementById('invalid-section');
+
+	if (url && /^https?:\/\//i.test(url)) {
+		try {
+			const parsed = new URL(url);
+			document.getElementById('hostname-display').textContent = parsed.hostname;
+			document.getElementById('url-display').textContent = url.length > 80 ? url.slice(0, 80) + '...' : url;
+			document.getElementById('continue-link').href = url;
+			validSection.classList.add('active');
+			// 用完清除
+			sessionStorage.removeItem('redirect_url');
+		} catch {
+			invalidSection.classList.add('active');
+		}
+	} else {
+		invalidSection.classList.add('active');
+	}
+</script>
