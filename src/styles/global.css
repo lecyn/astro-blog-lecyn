@@ -208,3 +208,9 @@ sup:has(a[data-footnote-ref])::after {
 	text-decoration: none;
 	margin-left: 0.25em;
 }
+
+/* 强制箭头符号以文本形式渲染，避免在 iOS/macOS 上显示为 emoji */
+.footnotes a[data-footnote-backref],
+.btn-continue {
+	font-variant-emoji: text;
+}
