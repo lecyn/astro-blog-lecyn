@@ -207,15 +207,14 @@ sup:has(a[data-footnote-ref])::after {
 .footnotes a[data-footnote-backref] {
 	text-decoration: none;
 	margin-left: 0.25em;
-	/* 用 SVG mask 替代 Unicode 箭头，跨平台一致 */
+	/* 用背景 SVG 替代 Unicode 箭头，跨平台一致 */
 	display: inline-block;
-	width: 1.1em;
-	height: 1.1em;
-	font-size: 0;
+	width: 18px;
+	height: 18px;
+	text-indent: -9999px;
+	overflow: hidden;
 	vertical-align: text-bottom;
-	background-color: currentColor;
-	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='black'/%3E%3Cpath d='M9 14L4 9l5-5' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M4 9h10.5a5.5 5.5 0 010 11H13' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
-	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='black'/%3E%3Cpath d='M9 14L4 9l5-5' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M4 9h10.5a5.5 5.5 0 010 11H13' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8a8a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 14L4 9l5-5'/%3E%3Cpath d='M4 9h10.5a5.5 5.5 0 010 11H13'/%3E%3C/svg%3E") no-repeat center / contain;
 }
 
 /* 强制箭头符号以文本形式渲染，避免在 iOS/macOS 上显示为 emoji */
