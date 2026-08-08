@@ -1,13 +1,15 @@
 ---
 title: "移动宽带光猫—获取超级管理员密码教程"
-description: "这篇教程详细说明了如何获取中国移动如何修改超级管理员密码。"
+description: "这篇教程详细说明了如何获取并修改中国移动光猫的超级管理员密码。"
 pubDate: "Aug 7 2026"
 heroImage: "https://t.alcy.cc/pc"
 ---
 
 ## 前言
 
-> 很早之前就通过一篇文章[^1]知道了如何修改移动光猫的超级管理员密码，很简洁实用。但考虑到随着设备的更新换代，一些步骤可能有所出入，在此做了一些调整并发布。  
+> 很早之前就通过一篇文章[^1]知道了如何修改移动光猫的超级管理员密码，很简洁实用。 我的设备有所不同，操作更简单，于是水一篇文章。  
+> 如果没有解决你的问题可以看看大佬的新文章[^2]。  
+> 感谢大佬分享！！！  
 > 如有侵权请联系删除。
 
 ## 我的设备
@@ -19,7 +21,7 @@ heroImage: "https://t.alcy.cc/pc"
 
 ## 第一步：开启Telnet
 
-直接在连接了网络的设备上访问访问:
+直接在连接了网络的设备上访问:
 
    ```
 http://192.168.1.1/usr=CMCCAdmin&psw=aDm8H%25MdA&cmd=1&telnet.gch
@@ -29,7 +31,7 @@ http://192.168.1.1/usr=CMCCAdmin&psw=aDm8H%25MdA&cmd=1&telnet.gch
 
 ![image](assets/CMCCAdmin-246aada8.png)
 
-## 第二步：用命令进入 Telnet
+## 第二步：进入 Telnet
 
 在 Windows 电脑上使用 cmd 输入：
 
@@ -37,9 +39,11 @@ http://192.168.1.1/usr=CMCCAdmin&psw=aDm8H%25MdA&cmd=1&telnet.gch
 telnet 192.168.1.1
 ```
 
-> 提示没有Telnet的，在控制面板 > 程序 > 启用或关闭Windows程序 > 启用“Telnet Client”
+> 提示没有Telnet的，在控制面板 > 程序 > 启用或关闭 Windows 功能 > 启用“Telnet Client”
 
-按照提示输入用户名：`CMCCAdmin` 和密码：`aDm8H%MdA`
+按照提示输入用户名：`CMCCAdmin`  密码：`aDm8H%MdA`
+
+![image](assets/CMCCAdmin-3069e7f1.png)
 
 > 输入密码不会显示出来，这里可以通过直接右键CMD进行粘贴。
 
@@ -49,7 +53,9 @@ telnet 192.168.1.1
 sidbg 1 DB p DevAuthInfo
 ```
 
-这时会把所有信息显示出来，这其中有2段：
+![image](assets/CMCCAdmin-268fa8ea.png)
+
+这时会有信息显示出来，这其中有2段：
 
 ```xml
 <DM name="User" val="******"/>
@@ -72,16 +78,19 @@ sidbg 1 DB set DevAuthInfo 0 Pass admin
 sidbg 1 DB save
 ```
 
+![image](assets/CMCCAdmin-32aebd9c.png)
+
 **现在光猫的超级管理员信息**：
 - 用户名：`CMCCAdmin`
 - 密码：`admin`
 
-## 第三步：用超级管理员登录
+## 第三步：超级管理员登录
 
 1. 访问: http://192.168.1.1
 2. 输入账号: `CMCCAdmin`
 3. 输入密码: `admin`
 
-登录进去后就能进行修改了。
+登录进去后就能进行修改了，不过我的设备隔一段时间就会自己重置密码，需要重新修改。
 
-[^1]: [移动宽带光猫—获取超级管理员密码教程](https://www.cnblogs.com/fengdongd/p/18094765) - 作者：[fengdong](https://www.cnblogs.com/fengdongd)，日期：2024-03-25 16:45
+[^1]: [移动宽带光猫—获取超级管理员密码教程](https://www.cnblogs.com/fengdongd/p/18094765) - 作者：[fengdong](https://www.cnblogs.com/fengdongd)，日期：2024-03-25 16:45  
+[^2]: [移动宽带光猫—获取超级管理员密码教程](https://www.cnblogs.com/fengdongd/p/19659513) - 作者：[fengdong](https://www.cnblogs.com/fengdongd)，日期：2026-03-02 15:39
