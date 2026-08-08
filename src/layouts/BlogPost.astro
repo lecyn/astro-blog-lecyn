@@ -189,4 +189,23 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 	lightbox.addEventListener('click', () => {
 		lightbox.classList.remove('active');
 	});
+
+	// 自动拦截文章内容中的站外链接
+	const siteHost = location.hostname;
+	document.querySelectorAll('.prose a[href]').forEach((a) => {
+		let href;
+		try {
+			href = new URL(a.href);
+		} catch {
+			return;
+		}
+		// 跳过站内链接、已设置 target="_blank" 的链接、javascript: 链接
+		if (href.hostname === siteHost || a.target === '_blank' || !/^https?:/.test(a.href)) {
+			return;
+		}
+		a.addEventListener('click', (e) => {
+			e.preventDefault();
+			location.href = `/redirect?url=${encodeURIComponent(a.href)}`;
+		});
+	});
 </script>

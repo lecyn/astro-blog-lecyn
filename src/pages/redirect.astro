@@ -1,0 +1,187 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { SITE_TITLE } from '../consts';
+
+const url = Astro.url.searchParams.get('url') || '';
+const isValidUrl = url && (url.startsWith('http://') || url.startsWith('https://'));
+
+let displayUrl = '';
+let hostname = '';
+if (isValidUrl) {
+	try {
+		const parsed = new URL(url);
+		hostname = parsed.hostname;
+		displayUrl = url.length > 80 ? url.slice(0, 80) + '...' : url;
+	} catch {
+		// invalid URL
+	}
+}
+
+const pageTitle = `即将离开 ${SITE_TITLE}`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={pageTitle} description="站外链接跳转确认" noindex={true} />
+		<style>
+			@media (min-width: 1101px) {
+				.layout-wrapper {
+					display: flex;
+					justify-content: center;
+					align-items: flex-start;
+					padding: 0 1em;
+				}
+				.layout-wrapper::after {
+					content: '';
+					width: 260px;
+					flex-shrink: 0;
+				}
+				.layout-wrapper main {
+					margin-left: 0;
+					margin-right: 0;
+				}
+			}
+			@media (max-width: 1100px) {
+				.layout-wrapper {
+					display: flex;
+					flex-direction: column;
+					padding-top: 4rem;
+				}
+				.layout-wrapper::after {
+					display: none;
+				}
+			}
+			main {
+				width: 720px;
+			}
+			.redirect-card {
+				background: rgb(22, 27, 34);
+				border: 1px solid rgb(48, 54, 61);
+				border-radius: 12px;
+				padding: 2.5em;
+				text-align: center;
+			}
+			.redirect-icon {
+				font-size: 3rem;
+				margin-bottom: 0.5em;
+			}
+			.redirect-card h1 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.5rem;
+			}
+			.redirect-card p {
+				color: rgb(var(--gray));
+				margin-bottom: 0.5em;
+				font-size: 0.9rem;
+			}
+			.redirect-card .url-display {
+				display: inline-block;
+				background: rgb(13, 17, 23);
+				border: 1px solid rgb(48, 54, 61);
+				border-radius: 8px;
+				padding: 0.75em 1em;
+				margin: 1em 0 1.5em;
+				word-break: break-all;
+				font-size: 0.85rem;
+				color: rgb(var(--gray-dark));
+				max-width: 100%;
+			}
+			.redirect-card .hostname {
+				font-weight: 700;
+				color: var(--accent);
+			}
+			.btn-group {
+				display: flex;
+				gap: 1em;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+			.btn-continue {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+				padding: 0.7em 1.8em;
+				background: var(--accent);
+				color: #fff;
+				border: none;
+				border-radius: 8px;
+				font-size: 1rem;
+				font-weight: 700;
+				text-decoration: none;
+				cursor: pointer;
+				transition: opacity 0.2s;
+			}
+			.btn-continue:hover {
+				opacity: 0.85;
+				color: #fff;
+			}
+			.btn-back {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+				padding: 0.7em 1.8em;
+				background: rgb(48, 54, 61);
+				color: rgb(var(--gray-dark));
+				border: none;
+				border-radius: 8px;
+				font-size: 1rem;
+				text-decoration: none;
+				cursor: pointer;
+				transition: background 0.2s;
+			}
+			.btn-back:hover {
+				background: rgb(64, 72, 82);
+				color: rgb(var(--gray-dark));
+			}
+			.warning {
+				font-size: 0.8rem;
+				color: rgb(var(--gray));
+				margin-top: 1.5em;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<div class="layout-wrapper">
+			<Sidebar />
+			<main>
+				<div class="redirect-card">
+					<div class="redirect-icon">&#128279;</div>
+					<h1>即将离开本站</h1>
+					{
+						isValidUrl ? (
+							<>
+								<p>你正在访问一个外部链接，点击下方按钮将在<strong>新标签页</strong>中打开：</p>
+								<div class="url-display">
+									<span class="hostname">{hostname}</span>
+									<br />{displayUrl}
+								</div>
+								<div class="btn-group">
+									<a href={url} target="_blank" rel="noopener noreferrer" class="btn-continue">
+										继续访问 &#8599;
+									</a>
+									<a href="javascript:history.back()" class="btn-back">
+										返回上一页
+									</a>
+								</div>
+							</>
+						) : (
+							<>
+								<p>未提供有效的目标链接，请返回继续浏览。</p>
+								<div class="btn-group">
+									<a href="/" class="btn-continue">返回首页</a>
+								</div>
+							</>
+						)
+					}
+					<p class="warning">请注意保护个人隐私，本站不对站外内容负责。</p>
+				</div>
+			</main>
+		</div>
+		<Footer />
+	</body>
+</html>
