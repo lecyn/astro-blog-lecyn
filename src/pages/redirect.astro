@@ -5,7 +5,8 @@ import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
 import { SITE_TITLE } from '../consts';
 
-const url = Astro.url.searchParams.get('url') || '';
+const rawUrl = Astro.url.searchParams.get('url') || '';
+const url = decodeURIComponent(rawUrl);
 const isValidUrl = url && (url.startsWith('http://') || url.startsWith('https://'));
 
 let displayUrl = '';
