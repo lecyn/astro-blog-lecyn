@@ -169,7 +169,7 @@ pre > code {
 .code-block-wrapper pre {
 	margin: 0;
 	padding: 0;
-	border-radius: 0;
+	border-radius: 9px;
 	background: transparent !important;
 	overflow: auto;
 	max-height: 32em;
