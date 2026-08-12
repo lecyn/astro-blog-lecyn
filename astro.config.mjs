@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import remarkGfm from "remark-gfm";
+import { rehypeCodeLanguage } from "./src/plugins/rehype-code-language";
 
 import cloudflare from "@astrojs/cloudflare";
 
@@ -12,6 +13,7 @@ export default defineConfig({
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		remarkPlugins: [remarkGfm],
+		rehypePlugins: [rehypeCodeLanguage],
 	},
 	adapter: cloudflare({
 		platformProxy: {

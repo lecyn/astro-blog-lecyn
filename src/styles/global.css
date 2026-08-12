@@ -137,6 +137,73 @@ pre {
 pre > code {
 	all: unset;
 }
+
+/* 代码块包装器 */
+.code-block-wrapper {
+	position: relative;
+	margin: 2em 0 1.5em 0;
+}
+.code-block-wrapper pre {
+	margin: 0;
+}
+
+/* 语言标签 */
+.code-language {
+	position: absolute;
+	top: 0;
+	left: 1em;
+	transform: translateY(-50%);
+	background: rgb(13, 17, 23);
+	color: rgb(var(--gray));
+	font-size: 0.7em;
+	padding: 0.15em 0.7em;
+	border-radius: 4px;
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	pointer-events: none;
+	z-index: 2;
+}
+
+/* 复制按钮 */
+.copy-button {
+	position: absolute;
+	top: 0.5em;
+	right: 0.5em;
+	display: flex;
+	align-items: center;
+	gap: 0.3em;
+	background: rgb(var(--gray-light) / 0.85);
+	color: rgb(var(--gray));
+	border: 1px solid rgb(var(--gray) / 0.15);
+	border-radius: 4px;
+	padding: 0.25em 0.7em;
+	font-size: 0.75em;
+	font-family: inherit;
+	cursor: pointer;
+	opacity: 0;
+	transition:
+		opacity 0.2s,
+		color 0.2s,
+		border-color 0.2s;
+	z-index: 2;
+}
+.code-block-wrapper:hover .copy-button {
+	opacity: 1;
+}
+.copy-button:hover {
+	color: rgb(var(--gray-dark));
+	border-color: rgb(var(--gray) / 0.4);
+}
+.copy-button.copied {
+	color: #3fb950;
+	border-color: #3fb950;
+}
+
+/* 复制按钮中的 SVG 图标 */
+.copy-button svg {
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
+}
 blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 0 0 0 20px;
