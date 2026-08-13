@@ -4,6 +4,9 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
+html {
+	scroll-behavior: smooth;
+}
 :root {
 	--accent: #5865f2;
 	--accent-rgb: 88, 101, 242;

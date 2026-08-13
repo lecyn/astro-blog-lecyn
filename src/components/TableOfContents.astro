@@ -13,13 +13,14 @@ const items = headings.filter((h) => h.depth <= 3);
 		{items.length > 0 && (
 			<>
 				<div class="toc-title">目录</div>
-				<ul>
+				<div class="toc-list" id="toc-list">
+					<div class="toc-indicator" id="toc-indicator"></div>
 					{items.map((h) => (
-						<li class={`toc-depth-${h.depth}`}>
-							<a href={`#${h.slug}`}>{h.text}</a>
-						</li>
+						<a class={`toc-item toc-depth-${h.depth}`} href={`#${h.slug}`} data-slug={h.slug} data-depth={h.depth}>
+							{h.text}
+						</a>
 					))}
-				</ul>
+				</div>
 			</>
 		)}
 	</div>
@@ -35,6 +36,18 @@ const items = headings.filter((h) => h.depth <= 3);
 		max-height: calc(100vh - 5rem);
 		overflow-y: auto;
 		font-size: 0.85rem;
+		scrollbar-width: thin;
+		scrollbar-color: rgb(var(--gray-light)) transparent;
+	}
+	.toc::-webkit-scrollbar {
+		width: 4px;
+	}
+	.toc::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.toc::-webkit-scrollbar-thumb {
+		background: rgb(var(--gray-light) / 0.8);
+		border-radius: 2px;
 	}
 	.toc-card {
 		background: rgb(22, 27, 34 / 0.55);
@@ -42,51 +55,63 @@ const items = headings.filter((h) => h.depth <= 3);
 		-webkit-backdrop-filter: blur(16px);
 		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 12px;
-		padding: 0 1rem 1rem;
+		padding: 0 0.5rem 0.75rem;
 	}
 	.toc-title {
-		padding-top: 1rem;
-	}
-	.toc-title {
+		padding: 1rem 0.5rem 0.5rem;
 		font-weight: 700;
 		color: rgb(var(--black));
-		margin-bottom: 0.5rem;
 	}
-	.toc ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
+
+	/* 目录项容器与滑动指示器 */
+	.toc-list {
+		position: relative;
+		display: flex;
+		flex-direction: column;
 	}
-	.toc li {
-		border-radius: 4px;
-		transition: background 0.15s;
+	.toc-indicator {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		height: 0;
+		border-radius: 8px;
+		background: rgb(var(--accent-rgb) / 0.15);
+		border: 1px solid rgb(var(--accent-rgb) / 0.35);
+		opacity: 0;
+		transition:
+			top 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			height 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.2s ease;
+		pointer-events: none;
+		z-index: 0;
 	}
-	.toc li:hover {
-		background: rgba(255, 255, 255, 0.05);
-	}
-	.toc li a {
+
+	.toc-item {
+		position: relative;
+		z-index: 1;
 		display: block;
-		padding: 0.2rem 0.3rem;
+		padding: 0.25rem 0.5rem;
+		margin: 1px 0;
+		border-radius: 8px;
 		color: rgb(var(--gray));
 		text-decoration: none;
-		transition: color 0.15s;
+		line-height: 1.5;
+		transition: color 0.15s ease;
 	}
-	.toc li:hover a {
+	.toc-item:hover {
 		color: rgb(var(--black));
+		background: rgba(255, 255, 255, 0.05);
 	}
-	/* 当前阅读章节高亮 */
-	.toc li.active {
-		background: rgb(var(--accent-rgb) / 0.15);
-	}
-	.toc li.active a {
+	.toc-item.active {
 		color: rgb(var(--accent-rgb));
 		font-weight: 700;
 	}
 	.toc-depth-2 {
-		padding-left: 0.75rem;
+		padding-left: 1rem;
 	}
 	.toc-depth-3 {
-		padding-left: 1.5rem;
+		padding-left: 1.75rem;
 	}
 
 	@media (max-width: 1200px) {
@@ -99,49 +124,115 @@ const items = headings.filter((h) => h.depth <= 3);
 <script>
 	const toc = document.querySelector('.toc');
 	if (toc) {
-		const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
-		const headings = links
-			.map((a) => document.getElementById(decodeURIComponent(a.getAttribute('href')!.slice(1))))
+		const list = toc.querySelector<HTMLElement>('.toc-list');
+		const indicator = toc.querySelector<HTMLElement>('.toc-indicator');
+		const items = Array.from(toc.querySelectorAll<HTMLAnchorElement>('.toc-item'));
+		const depths = items.map((el) => parseInt(el.dataset.depth || '2', 10));
+		const headings = items
+			.map((el) => document.getElementById(decodeURIComponent(el.getAttribute('href')!.slice(1))))
 			.filter((el): el is HTMLElement => el !== null);
 
-		let activeIndex = -1;
+		// 顶栏（sticky header）高度补偿
+		const OFFSET = 90;
+		let current = -1;
+		let ticking = false;
 
-		const update = () => {
-			const offset = 100;
-			let current = -1;
+		// 计算当前活动标题索引（滚动位置法）
+		const getCurrentIndex = () => {
+			let next = -1;
 			for (let i = 0; i < headings.length; i++) {
-				if (headings[i].getBoundingClientRect().top <= offset) {
-					current = i;
+				if (headings[i].getBoundingClientRect().top <= OFFSET) {
+					next = i;
 				} else {
 					break;
 				}
 			}
-
-			// 页面滚动到底部时，强制高亮最后一项
+			// 滚动到底部时强制高亮最后一项
 			if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
-				current = headings.length - 1;
+				next = headings.length - 1;
 			}
-
-			if (current === activeIndex) return;
-			activeIndex = current;
-
-			links.forEach((link, i) => {
-				const li = link.closest('li');
-				if (i === current) {
-					li?.classList.add('active');
-					// 让目录跟随滚动，将当前项保持在目录中部
-					const containerRect = toc.getBoundingClientRect();
-					const liRect = li.getBoundingClientRect();
-					const targetTop = containerRect.height / 2 - liRect.height / 2;
-					toc.scrollTop += liRect.top - containerRect.top - targetTop;
-				} else {
-					li?.classList.remove('active');
-				}
-			});
+			return next;
 		};
 
-		window.addEventListener('scroll', update, { passive: true });
-		window.addEventListener('resize', update, { passive: true });
-		update();
+		const apply = () => {
+			items.forEach((el) => el.classList.remove('active'));
+
+			if (current < 0) {
+				if (indicator) indicator.style.opacity = '0';
+				return;
+			}
+
+			// 向上回溯，找出当前章节的父级标题范围（多级联动高亮）
+			let min = current;
+			let prevDepth = depths[current];
+			for (let i = current - 1; i >= 0; i--) {
+				if (depths[i] < prevDepth) {
+					min = i;
+					prevDepth = depths[i];
+				}
+			}
+
+			const minEl = items[min];
+			const maxEl = items[current];
+			const top = minEl.offsetTop;
+			const height = maxEl.offsetTop + maxEl.offsetHeight - top;
+
+			if (indicator) {
+				indicator.style.opacity = '1';
+				indicator.style.top = `${top}px`;
+				indicator.style.height = `${height}px`;
+			}
+
+			for (let i = min; i <= current; i++) {
+				items[i].classList.add('active');
+			}
+
+			// 让目录容器跟随滚动，将活动章节保持在可见区域
+			const containerRect = toc.getBoundingClientRect();
+			const minRect = minEl.getBoundingClientRect();
+			const maxRect = maxEl.getBoundingClientRect();
+			const visibleHeight = maxRect.bottom - minRect.top;
+			let targetTop: number;
+			if (visibleHeight < 0.9 * containerRect.height) {
+				targetTop = minEl.offsetTop - 32;
+			} else {
+				targetTop = maxEl.offsetTop - toc.clientHeight * 0.8;
+			}
+			toc.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+		};
+
+		const update = () => {
+			ticking = false;
+			const next = getCurrentIndex();
+			if (next === current) return;
+			current = next;
+			apply();
+		};
+
+		const onScroll = () => {
+			if (!ticking) {
+				ticking = true;
+				requestAnimationFrame(update);
+			}
+		};
+
+		// 点击目录项：平滑滚动到对应标题
+		items.forEach((el, i) => {
+			el.addEventListener('click', (e) => {
+				e.preventDefault();
+				const id = decodeURIComponent(el.getAttribute('href')!.slice(1));
+				const target = document.getElementById(id);
+				if (!target) return;
+				const top = target.getBoundingClientRect().top + window.scrollY - OFFSET;
+				window.scrollTo({ top, behavior: 'smooth' });
+				history.replaceState(null, '', `#${id}`);
+				current = i;
+				apply();
+			});
+		});
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('resize', onScroll, { passive: true });
+		apply();
 	}
 </script>
