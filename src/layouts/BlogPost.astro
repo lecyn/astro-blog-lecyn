@@ -111,7 +111,7 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 				inset: 0;
 				z-index: 9999;
 				background: rgba(0, 0, 0, 0.9);
-				cursor: pointer;
+				overflow: hidden;
 			}
 			.lightbox.active {
 				display: flex;
@@ -122,6 +122,45 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 				max-width: 90vw;
 				max-height: 90vh;
 				object-fit: contain;
+				cursor: zoom-in;
+				user-select: none;
+				-webkit-user-select: none;
+				transition: transform 0.15s ease-out;
+				will-change: transform;
+			}
+			.lightbox img.dragging {
+				transition: none;
+				cursor: grabbing;
+			}
+			/* 圆形毛玻璃关闭按钮 */
+			.lightbox-close {
+				position: absolute;
+				top: 1.5rem;
+				right: 1.5rem;
+				width: 3rem;
+				height: 3rem;
+				border: 1px solid rgba(255, 255, 255, 0.25);
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.12);
+				backdrop-filter: blur(12px);
+				-webkit-backdrop-filter: blur(12px);
+				color: #fff;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition:
+					background 0.2s,
+					transform 0.2s;
+				z-index: 1;
+			}
+			.lightbox-close:hover {
+				background: rgba(255, 255, 255, 0.25);
+				transform: scale(1.08);
+			}
+			.lightbox-close svg {
+				width: 1.3rem;
+				height: 1.3rem;
 			}
 			.title {
 				margin-bottom: 1em;
@@ -173,22 +212,123 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 			<TableOfContents headings={headings} />
 		</div>
 		<Footer />
-		<div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt="" /></div>
+		<div class="lightbox" id="lightbox">
+			<button class="lightbox-close" id="lightbox-close" aria-label="关闭预览">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="M6 6l12 12" /></svg>
+			</button>
+			<img id="lightbox-img" src="" alt="" draggable="false" />
+		</div>
 	</body>
 </html>
 
 <script>
 	const lightbox = document.getElementById('lightbox');
 	const lightboxImg = document.getElementById('lightbox-img');
-	document.querySelectorAll('.prose img').forEach((img) => {
-		img.addEventListener('click', () => {
-			lightboxImg.src = img.src;
-			lightbox.classList.add('active');
-		});
-	});
-	lightbox.addEventListener('click', () => {
+	const lightboxClose = document.getElementById('lightbox-close');
+
+	// 缩放 / 平移状态
+	let scale = 1;
+	let tx = 0;
+	let ty = 0;
+	let isDragging = false;
+	let startX = 0;
+	let startY = 0;
+	let originTx = 0;
+	let originTy = 0;
+
+	const applyTransform = () => {
+		lightboxImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+		lightboxImg.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+	};
+
+	const resetTransform = () => {
+		scale = 1;
+		tx = 0;
+		ty = 0;
+		applyTransform();
+	};
+
+	const openLightbox = (img) => {
+		lightboxImg.src = img.src;
+		resetTransform();
+		lightbox.classList.add('active');
+	};
+
+	const closeLightbox = () => {
 		lightbox.classList.remove('active');
+		lightboxImg.src = '';
+		resetTransform();
+	};
+
+	document.querySelectorAll('.prose img').forEach((img) => {
+		img.addEventListener('click', () => openLightbox(img));
 	});
+
+	lightboxClose.addEventListener('click', closeLightbox);
+
+	// 点击遮罩（非图片）关闭
+	lightbox.addEventListener('click', (e) => {
+		if (e.target === lightbox) closeLightbox();
+	});
+
+	// Esc 键关闭
+	window.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+	});
+
+	// 滚轮缩放
+	lightbox.addEventListener(
+		'wheel',
+		(e) => {
+			e.preventDefault();
+			const delta = e.deltaY < 0 ? 0.15 : -0.15;
+			scale = Math.min(Math.max(scale + delta, 1), 5);
+			if (scale <= 1) {
+				tx = 0;
+				ty = 0;
+			}
+			applyTransform();
+		},
+		{ passive: false },
+	);
+
+	// 双击切换缩放
+	lightboxImg.addEventListener('dblclick', () => {
+		if (scale > 1) {
+			resetTransform();
+		} else {
+			scale = 2;
+			applyTransform();
+		}
+	});
+
+	// 拖拽平移（指针事件，兼容鼠标与触摸）
+	lightboxImg.addEventListener('pointerdown', (e) => {
+		if (scale <= 1) return;
+		isDragging = true;
+		startX = e.clientX;
+		startY = e.clientY;
+		originTx = tx;
+		originTy = ty;
+		lightboxImg.setPointerCapture(e.pointerId);
+		lightboxImg.classList.add('dragging');
+	});
+
+	lightboxImg.addEventListener('pointermove', (e) => {
+		if (!isDragging) return;
+		tx = originTx + (e.clientX - startX);
+		ty = originTy + (e.clientY - startY);
+		applyTransform();
+	});
+
+	const endDrag = () => {
+		if (!isDragging) return;
+		isDragging = false;
+		lightboxImg.classList.remove('dragging');
+	};
+
+	lightboxImg.addEventListener('pointerup', endDrag);
+	lightboxImg.addEventListener('pointercancel', endDrag);
 
 	// 自动拦截文章内容中的站外链接
 	const siteHost = location.hostname;
