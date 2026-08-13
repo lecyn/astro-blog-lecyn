@@ -37,7 +37,10 @@ const items = headings.filter((h) => h.depth <= 3);
 		font-size: 0.85rem;
 	}
 	.toc-card {
-		background: rgb(22, 27, 34);
+		background: rgb(22, 27, 34 / 0.55);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 12px;
 		padding: 0 1rem 1rem;
 	}
@@ -71,6 +74,14 @@ const items = headings.filter((h) => h.depth <= 3);
 	.toc li:hover a {
 		color: rgb(var(--black));
 	}
+	/* 当前阅读章节高亮 */
+	.toc li.active {
+		background: rgb(var(--accent-rgb) / 0.15);
+	}
+	.toc li.active a {
+		color: rgb(var(--accent-rgb));
+		font-weight: 700;
+	}
 	.toc-depth-2 {
 		padding-left: 0.75rem;
 	}
@@ -84,3 +95,53 @@ const items = headings.filter((h) => h.depth <= 3);
 		}
 	}
 </style>
+
+<script>
+	const toc = document.querySelector('.toc');
+	if (toc) {
+		const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+		const headings = links
+			.map((a) => document.getElementById(decodeURIComponent(a.getAttribute('href')!.slice(1))))
+			.filter((el): el is HTMLElement => el !== null);
+
+		let activeIndex = -1;
+
+		const update = () => {
+			const offset = 100;
+			let current = -1;
+			for (let i = 0; i < headings.length; i++) {
+				if (headings[i].getBoundingClientRect().top <= offset) {
+					current = i;
+				} else {
+					break;
+				}
+			}
+
+			// 页面滚动到底部时，强制高亮最后一项
+			if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
+				current = headings.length - 1;
+			}
+
+			if (current === activeIndex) return;
+			activeIndex = current;
+
+			links.forEach((link, i) => {
+				const li = link.closest('li');
+				if (i === current) {
+					li?.classList.add('active');
+					// 让目录跟随滚动，将当前项保持在目录中部
+					const containerRect = toc.getBoundingClientRect();
+					const liRect = li.getBoundingClientRect();
+					const targetTop = containerRect.height / 2 - liRect.height / 2;
+					toc.scrollTop += liRect.top - containerRect.top - targetTop;
+				} else {
+					li?.classList.remove('active');
+				}
+			});
+		};
+
+		window.addEventListener('scroll', update, { passive: true });
+		window.addEventListener('resize', update, { passive: true });
+		update();
+	}
+</script>
