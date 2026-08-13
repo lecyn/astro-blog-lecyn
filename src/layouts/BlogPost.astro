@@ -210,7 +210,7 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 		});
 	});
 
-	// 为代码块添加语言标签和复制按钮
+	// 为代码块添加顶部标题栏（语言类型 + 复制按钮）
 	document.querySelectorAll('.prose pre').forEach((pre) => {
 		// 跳过已经处理过的代码块
 		if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
@@ -219,18 +219,19 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 		const wrapper = document.createElement('div');
 		wrapper.className = 'code-block-wrapper';
 		pre.parentNode!.insertBefore(wrapper, pre);
-		wrapper.appendChild(pre);
 
-		// 读取语言信息并添加语言标签
+		// 创建顶部标题栏
+		const header = document.createElement('div');
+		header.className = 'code-block-header';
+
+		// 语言标签
 		const lang = pre.getAttribute('data-language');
-		if (lang) {
-			const langLabel = document.createElement('span');
-			langLabel.className = 'code-language';
-			langLabel.textContent = lang;
-			wrapper.appendChild(langLabel);
-		}
+		const langLabel = document.createElement('span');
+		langLabel.className = 'code-language';
+		langLabel.innerHTML = '<span class="code-dot"></span>' + (lang || 'text');
+		header.appendChild(langLabel);
 
-		// 创建复制按钮
+		// 复制按钮
 		const copyBtn = document.createElement('button');
 		copyBtn.className = 'copy-button';
 		copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>复制</span>';
@@ -257,6 +258,9 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 				if (span) span.textContent = '复制';
 			}, 2000);
 		});
-		wrapper.appendChild(copyBtn);
+		header.appendChild(copyBtn);
+
+		wrapper.appendChild(header);
+		wrapper.appendChild(pre);
 	});
 </script>
