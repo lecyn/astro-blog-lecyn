@@ -178,10 +178,77 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 			.last-updated-on {
 				font-style: italic;
 			}
+
+			/* 文章页左右两侧竖状背景分区：
+			   以个人简介（左）与目录（右）卡片的中轴线为基线，
+			   两侧使用不同竖状背景图，中间保持不变，基线处向中间渐变延伸 */
+			.post-bg {
+				display: none;
+			}
+			@media (min-width: 1101px) {
+				body.post-layout {
+					isolation: isolate;
+				}
+				.post-bg {
+					display: block;
+					position: fixed;
+					inset: 0;
+					z-index: -1;
+					pointer-events: none;
+				}
+				.post-bg-side {
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					background-repeat: no-repeat;
+					background-size: cover;
+					background-position: center;
+				}
+				/* 左侧：个人简介中轴线为基线，渐变向右（向中间）延伸 */
+				.post-bg-left {
+					left: 0;
+					width: calc(var(--side-baseline) + var(--side-fade));
+					background-image: var(--bg-side-left);
+					-webkit-mask-image: linear-gradient(
+						to right,
+						#000 0,
+						#000 var(--side-baseline),
+						transparent calc(var(--side-baseline) + var(--side-fade))
+					);
+					mask-image: linear-gradient(
+						to right,
+						#000 0,
+						#000 var(--side-baseline),
+						transparent calc(var(--side-baseline) + var(--side-fade))
+					);
+				}
+				/* 右侧：目录中轴线为基线，渐变向左（向中间）延伸 */
+				.post-bg-right {
+					right: 0;
+					width: calc(var(--side-baseline) + var(--side-fade));
+					background-image: var(--bg-side-right);
+					-webkit-mask-image: linear-gradient(
+						to left,
+						#000 0,
+						#000 var(--side-baseline),
+						transparent calc(var(--side-baseline) + var(--side-fade))
+					);
+					mask-image: linear-gradient(
+						to left,
+						#000 0,
+						#000 var(--side-baseline),
+						transparent calc(var(--side-baseline) + var(--side-fade))
+					);
+				}
+			}
 		</style>
 	</head>
 
-	<body>
+	<body class="post-layout">
+		<div class="post-bg" aria-hidden="true">
+			<div class="post-bg-side post-bg-left"></div>
+			<div class="post-bg-side post-bg-right"></div>
+		</div>
 		<Header />
 		<div class="layout-wrapper">
 			<Sidebar />

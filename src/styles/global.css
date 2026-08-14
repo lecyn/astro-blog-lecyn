@@ -19,6 +19,13 @@ html {
 	--box-shadow:
 		0 2px 6px rgba(0, 0, 0, 30%), 0 8px 24px rgba(0, 0, 0, 40%),
 		0 16px 32px rgba(0, 0, 0, 40%);
+
+	/* 文章页左右两侧竖状背景图（随机竖屏壁纸，同源每次刷新可能不同） */
+	--bg-side-left: url('https://t.alcy.cc/mp');
+	--bg-side-right: url('https://t.alcy.cc/mp');
+	/* 个人简介 / 目录卡片中轴线到页面边缘的距离，以及渐变向中间延伸的距离 */
+	--side-baseline: 146px;
+	--side-fade: 360px;
 }
 @font-face {
 	font-family: "Atkinson";
