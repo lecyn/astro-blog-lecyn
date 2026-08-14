@@ -31,6 +31,7 @@ html {
 	--glass-bg: rgb(22, 27, 34 / 0.72);
 	--glass-blur: 20px;
 	--glass-border: rgba(255, 255, 255, 0.08);
+	--glass-text: 216, 224, 238;
 }
 @font-face {
 	font-family: "Atkinson";
