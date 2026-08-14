@@ -39,9 +39,16 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
 	background-color: rgb(13, 17, 23);
+	background-image:
+		radial-gradient(1100px 560px at 12% -6%, rgba(72, 82, 98, 0.22), transparent 60%),
+		radial-gradient(950px 500px at 88% 0%, rgba(54, 64, 80, 0.18), transparent 56%),
+		radial-gradient(880px 520px at 45% 18%, rgba(40, 48, 60, 0.16), transparent 60%),
+		radial-gradient(1080px 640px at 6% 58%, rgba(58, 68, 84, 0.14), transparent 60%),
+		radial-gradient(980px 600px at 94% 82%, rgba(47, 56, 71, 0.16), transparent 58%),
+		linear-gradient(var(--gray-gradient));
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
