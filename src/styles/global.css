@@ -26,6 +26,11 @@ html {
 	/* 个人简介 / 目录卡片中轴线到页面边缘的距离，以及渐变向中间延伸的距离 */
 	--side-baseline: 146px;
 	--side-fade: 360px;
+
+	/* 暗色毛玻璃：统一透明度与模糊强度，提升可读性 */
+	--glass-bg: rgb(22, 27, 34 / 0.72);
+	--glass-blur: 20px;
+	--glass-border: rgba(255, 255, 255, 0.08);
 }
 @font-face {
 	font-family: "Atkinson";

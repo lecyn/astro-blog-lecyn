@@ -30,10 +30,10 @@ const intro = intros[Math.floor(Math.random() * intros.length)];
 		transform: translateY(-50%);
 	}
 	.card {
-		background: rgb(22, 27, 34 / 0.55);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
-		border: 1px solid rgba(255, 255, 255, 0.08);
+		background: var(--glass-bg);
+		backdrop-filter: blur(var(--glass-blur));
+		-webkit-backdrop-filter: blur(var(--glass-blur));
+		border: 1px solid var(--glass-border);
 		border-radius: 12px;
 		overflow: hidden;
 		text-align: center;

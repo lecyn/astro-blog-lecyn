@@ -120,3 +120,4 @@ npm run deploy
 - 感谢 [Mizuki](https://github.com/LyraVoid/Mizuki) 提供代码实现参考（Apache License 2.0）
 - 感谢 [Fuwari](https://github.com/saicaca/fuwari) 作为 Mizuki 的上游模板（MIT License）
 - 感谢 Cloudflare 的 [astro-blog-starter-template](https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template) 作为本项目的起点
+- 感谢 [alcy.cc](https://t.alcy.cc/) 提供背景图片 API
