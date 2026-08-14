@@ -33,10 +33,22 @@ const today = new Date();
 </footer>
 <style>
 	footer {
+		position: relative;
 		padding: 2em 1em 6em 1em;
 		background: linear-gradient(var(--gray-gradient)) no-repeat;
 		color: rgb(var(--gray));
 		text-align: center;
+	}
+	/* 页脚顶部渐变：从上方正文深色背景平滑过渡到页脚背景 */
+	footer::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 6em;
+		background: linear-gradient(to bottom, rgb(13, 17, 23), transparent);
+		pointer-events: none;
 	}
 	.social-links {
 		display: flex;
