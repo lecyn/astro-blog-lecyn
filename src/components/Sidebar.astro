@@ -85,6 +85,9 @@ const intro = intros[Math.floor(Math.random() * intros.length)];
 		color: rgb(var(--glass-text));
 		min-height: 1.5em;
 	}
+	.typewriter {
+		white-space: pre-line; /* 允许换行符生效 */
+	}
 	.cursor {
 		animation: blink 1s step-end infinite;
 	}
@@ -128,7 +131,9 @@ const intro = intros[Math.floor(Math.random() * intros.length)];
 <script>
 	const el = document.getElementById("typewriter");
 	if (el) {
-		const text = el.dataset.text || "";
+		// 获取原始文本，将字面量 "\n" 替换为真实换行符
+		const rawText = el.dataset.text || "";
+		const text = rawText.replace(/\\n/g, "\n");
 		const speed = parseInt(el.dataset.speed) || 80;
 
 		let i = 0;
