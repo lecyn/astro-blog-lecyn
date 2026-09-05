@@ -1,8 +1,5 @@
 ---
 import { SITE_TITLE } from '../consts';
-import intros from '../data/intros.json';
-
-const intro = intros[Math.floor(Math.random() * intros.length)];
 ---
 
 <aside class="sidebar">
@@ -14,7 +11,7 @@ const intro = intros[Math.floor(Math.random() * intros.length)];
 			<div class="name">Lecyn</div>
 			<div class="divider"></div>
 			<div class="typewriter-container">
-				<span class="typewriter" id="typewriter" data-text={intro} data-speed="80"></span>
+				<span class="typewriter" id="typewriter" data-speed="80"></span>
 				<span class="cursor">|</span>
 			</div>
 		</div>
@@ -86,7 +83,7 @@ const intro = intros[Math.floor(Math.random() * intros.length)];
 		min-height: 1.5em;
 	}
 	.typewriter {
-		white-space: pre-line; /* 允许换行符生效 */
+		white-space: pre-line;
 	}
 	.cursor {
 		animation: blink 1s step-end infinite;
@@ -131,20 +128,46 @@ const intro = intros[Math.floor(Math.random() * intros.length)];
 <script>
 	const el = document.getElementById("typewriter");
 	if (el) {
-		// 获取原始文本，将字面量 "\n" 替换为真实换行符
-		const rawText = el.dataset.text || "";
-		const text = rawText.replace(/\\n/g, "\n");
 		const speed = parseInt(el.dataset.speed) || 80;
 
+		// 从服务器获取所有介绍句子
+		fetch('/intros.json')
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('无法加载介绍数据');
+				}
+				return response.json();
+			})
+			.then(intros => {
+				if (!Array.isArray(intros) || intros.length === 0) {
+					throw new Error('介绍数据为空');
+				}
+				// 随机选取一句
+				const randomIntro = intros[Math.floor(Math.random() * intros.length)];
+				// 将字面量 "\n" 替换为真实换行符
+				const text = randomIntro.replace(/\\n/g, "\n");
+				// 设置数据并启动打字机
+				el.dataset.text = text;
+				startTyping(el, text, speed);
+			})
+			.catch(error => {
+				console.error('获取介绍失败：', error);
+				// 出错时显示默认文本
+				const fallbackText = "欢迎来到我的博客";
+				el.dataset.text = fallbackText;
+				startTyping(el, fallbackText, speed);
+			});
+	}
+
+	function startTyping(element, text, speed) {
 		let i = 0;
 		function type() {
 			if (i < text.length) {
-				el.textContent = text.substring(0, i + 1);
+				element.textContent = text.substring(0, i + 1);
 				i++;
 				setTimeout(type, speed);
 			}
 		}
-
 		type();
 	}
 </script>
