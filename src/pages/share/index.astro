@@ -40,6 +40,9 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 					padding: 0 1em;
 				}
 				.layout-wrapper main {
+					flex: 1 1 960px;
+					min-width: 0;
+					max-width: 960px;
 					margin-left: 0;
 					margin-right: 0;
 				}
@@ -192,6 +195,7 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 						))
 					}
 				</ul>
+				{shares.length === 0 && <p class="empty-hint">还没有分享，敬请期待。</p>}
 			</section>
 		</main>
 			<TagCloud />
