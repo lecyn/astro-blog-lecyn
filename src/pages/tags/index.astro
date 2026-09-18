@@ -55,8 +55,10 @@ const pageDescription = `全部标签，共 ${tags.length} 个 — ${SITE_DESCRI
 					flex: 1 1 960px;
 					min-width: 0;
 					max-width: 960px;
-					margin-left: 0;
-					margin-right: 0;
+					/* 全局 main 是 margin:auto，交叉轴上的 auto 外边距会抢在
+					   align-items 之前吃掉剩余空间，把主内容竖直居中；
+					   显式归零，让正文从顶部开始排版。 */
+					margin: 0;
 				}
 			}
 			@media (max-width: 1100px) {
