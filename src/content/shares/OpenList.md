@@ -1,6 +1,6 @@
 ---
 title: "OpenList Windows 安装与使用文档"
-description: "在 Windows 上安装、启动并配置 OpenList 的图文教程。"
+description: "多网盘聚合管理工具，支持挂载、分块、加密等操作，妈妈再也不会担心我的网盘文件被和谐啦！"
 pubDate: "Sept 18 2026"
 tags: ["tool", "drive"]
 ---
