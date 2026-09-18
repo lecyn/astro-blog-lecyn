@@ -1,0 +1,115 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import StructuredData from '../../components/StructuredData.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import SideBackground from '../../components/SideBackground.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getAllTags, tagToPath } from '../../lib/tags';
+
+const tags = await getAllTags();
+const maxCount = tags.reduce((max, item) => Math.max(max, item.count), 0);
+const totalCount = tags.reduce((sum, item) => sum + item.count, 0);
+
+const levelOf = (count: number) => {
+	if (maxCount <= 1) return 3;
+	const ratio = count / maxCount;
+	if (ratio >= 0.8) return 4;
+	if (ratio >= 0.55) return 3;
+	if (ratio >= 0.3) return 2;
+	return 1;
+};
+
+const pageTitle = `标签 - ${SITE_TITLE}`;
+const pageDescription = `全部标签，共 ${tags.length} 个 — ${SITE_DESCRIPTION}`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+		<StructuredData type="WebSite" />
+		<StructuredData
+			type="BreadcrumbList"
+			breadcrumbs={[
+				{ name: '首页', url: new URL('/', Astro.site).href },
+				{ name: '标签', url: new URL('/tags/', Astro.site).href },
+			]}
+		/>
+		<style>
+			@media (min-width: 1101px) {
+				.layout-wrapper {
+					display: flex;
+					justify-content: center;
+					align-items: flex-start;
+					padding: 0 1em;
+				}
+				/* 与列表页保持同样的右侧留白，使正文中轴一致 */
+				.layout-wrapper::after {
+					content: '';
+					width: 260px;
+					flex-shrink: 0;
+				}
+				.layout-wrapper main {
+					margin-left: 0;
+					margin-right: 0;
+				}
+			}
+			@media (max-width: 1100px) {
+				.layout-wrapper {
+					display: flex;
+					flex-direction: column;
+					padding-top: 4rem;
+				}
+				.layout-wrapper::after {
+					display: none;
+				}
+			}
+			main {
+				width: 960px;
+			}
+			.page-title {
+				margin: 0;
+				font-size: 1.75rem;
+				color: rgb(var(--black));
+			}
+			.page-desc {
+				margin: 0.4rem 0 1.5rem;
+				font-size: 0.85rem;
+				color: rgb(var(--gray));
+			}
+			.empty {
+				color: rgb(var(--gray));
+			}
+		</style>
+	</head>
+	<body class="post-layout">
+		<SideBackground />
+		<Header />
+		<div class="layout-wrapper">
+			<Sidebar />
+		<main>
+			<section>
+				<h1 class="page-title">标签</h1>
+				<p class="page-desc">{tags.length} 个标签 · {totalCount} 篇内容</p>
+				{
+					tags.length > 0 ? (
+						<div class="tag-cloud-body is-static">
+							{tags.map(({ tag, count }) => (
+								<a class:list={['tag-chip', `tag-level-${levelOf(count)}`]} href={tagToPath(tag)}>
+									<span>{tag}</span>
+									<span class="tag-chip-count">{count}</span>
+								</a>
+							))}
+						</div>
+					) : (
+						<p class="empty">暂无标签，在文章 frontmatter 中添加 tags 字段即可。</p>
+					)
+				}
+			</section>
+		</main>
+		</div>
+		<Footer />
+	</body>
+</html>

@@ -8,6 +8,7 @@ import Sidebar from '../components/Sidebar.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import SideBackground from '../components/SideBackground.astro';
+import TagList from '../components/TagList.astro';
 import { SITE_TITLE } from '../consts';
 
 interface Props {
@@ -16,10 +17,12 @@ interface Props {
 	pubDate: Date;
 	updatedDate?: Date;
 	heroImage?: string;
+	tags?: string[];
 	headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } =
+	Astro.props;
 
 const pageUrl = Astro.url.href;
 const category = Astro.url.pathname.split('/')[1] || '';
@@ -179,6 +182,11 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 			.last-updated-on {
 				font-style: italic;
 			}
+			.post-tags {
+				display: flex;
+				justify-content: center;
+				margin: 0 0 1.25em;
+			}
 		</style>
 	</head>
 
@@ -205,6 +213,13 @@ const categoryLabel = category === 'blog' ? '博客' : category === 'notes' ? '�
 							}
 						</div>
 						<h1>{title}</h1>
+						{
+							tags.length > 0 && (
+								<div class="post-tags">
+									<TagList tags={tags} />
+								</div>
+							)
+						}
 						<hr />
 					</div>
 					<slot />

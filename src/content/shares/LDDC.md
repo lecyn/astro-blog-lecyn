@@ -3,6 +3,7 @@ title: "LDDC-好用的歌词匹配工具"
 description: "还在烦恼无法为自己心仪的歌曲找到完美的字幕，抑或歌曲平台只提供逐行而非逐字的歌词而烦恼吗？不妨试试LDDC吧！"
 pubDate: "Aug 2 2026"
 heroImage: "https://t.alcy.cc/pc"
+tags: ["tool", "music"]
 ---
 
 ## 1. 项目链接

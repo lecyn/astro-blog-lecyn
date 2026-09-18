@@ -8,6 +8,8 @@ import SideBackground from '../../components/SideBackground.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
+import TagList from '../../components/TagList.astro';
+import TagCloud from '../../components/TagCloud.astro';
 
 const shares = (await getCollection('shares')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -37,11 +39,6 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 					align-items: flex-start;
 					padding: 0 1em;
 				}
-				.layout-wrapper::after {
-					content: '';
-					width: 260px;
-					flex-shrink: 0;
-				}
 				.layout-wrapper main {
 					margin-left: 0;
 					margin-right: 0;
@@ -53,14 +50,11 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 					flex-direction: column;
 					padding-top: 4rem;
 				}
-				.layout-wrapper::after {
-					display: none;
-				}
 			}
 			main {
 				width: 960px;
 			}
-			ul {
+			.post-list {
 				display: flex;
 				flex-direction: column;
 				gap: 1.5rem;
@@ -68,18 +62,21 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 				margin: 0;
 				padding: 0;
 			}
-			ul li a {
+			.post-list > li > a {
 				display: flex;
 				gap: 1.25rem;
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
-			ul li a:hover .title,
-			ul li a:hover .date {
+			.post-list > li > a:hover .title,
+			.post-list > li > a:hover .date {
 				color: rgb(var(--accent));
 			}
-			ul a:hover .img-wrapper img {
+			.post-list a:hover .img-wrapper img {
 				box-shadow: var(--box-shadow);
+			}
+			.card-tags {
+				margin-top: 0.6rem;
 			}
 
 			.img-wrapper {
@@ -132,33 +129,33 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 				align-self: flex-end;
 			}
 
-			ul li:first-child .img-wrapper::after {
+			.post-list > li:first-child .img-wrapper::after {
 				display: none;
 			}
-			ul li:first-child a {
+			.post-list > li:first-child > a {
 				flex-direction: column;
 				gap: 0.75rem;
 			}
-			ul li:first-child .img-wrapper {
+			.post-list > li:first-child .img-wrapper {
 				width: 100%;
 				height: auto;
 			}
-			ul li:first-child .img-wrapper img {
+			.post-list > li:first-child .img-wrapper img {
 				aspect-ratio: 16/9;
 			}
-			ul li:first-child .title {
+			.post-list > li:first-child .title {
 				font-size: 1.563rem;
 			}
 
 			@media (max-width: 720px) {
-				ul {
+				.post-list {
 					gap: 1rem;
 				}
 				.img-wrapper {
 					width: 140px;
 					height: 90px;
 				}
-				ul li:first-child .img-wrapper {
+				.post-list > li:first-child .img-wrapper {
 					width: 100%;
 					height: auto;
 				}
@@ -172,7 +169,7 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 			<Sidebar />
 		<main>
 			<section>
-				<ul>
+				<ul class="post-list">
 					{
 						shares.map((share) => (
 							<li>
@@ -188,12 +185,16 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 										</p>
 									</div>
 								</a>
+								<div class="card-tags">
+									<TagList tags={share.data.tags} size="sm" />
+								</div>
 							</li>
 						))
 					}
 				</ul>
 			</section>
 		</main>
+			<TagCloud />
 		</div>
 		<Footer />
 	</body>

@@ -1,0 +1,25 @@
+---
+import { normalizeTag, tagToPath } from '../lib/tags';
+
+interface Props {
+	tags?: string[];
+	size?: 'sm' | 'md';
+}
+
+const { tags = [], size = 'md' } = Astro.props;
+const list = [...new Set(tags.map(normalizeTag).filter(Boolean))];
+---
+
+{
+	list.length > 0 && (
+		<ul class:list={['tag-list', `tag-list-${size}`]}>
+			{list.map((tag) => (
+				<li>
+					<a class="tag-chip" href={tagToPath(tag)}>
+						{tag}
+					</a>
+				</li>
+			))}
+		</ul>
+	)
+}
