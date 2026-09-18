@@ -1,0 +1,153 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
+import SideBackground from '../components/SideBackground.astro';
+import { SITE_TITLE } from '../consts';
+
+const pageTitle = `页面不存在 - ${SITE_TITLE}`;
+const pageDescription = '你访问的页面不存在，或者已经被移动、删除。';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} noindex={true} />
+		<style>
+			@media (min-width: 1101px) {
+				.layout-wrapper {
+					display: flex;
+					justify-content: center;
+					align-items: flex-start;
+					padding: 0 1em;
+				}
+				/* 与列表页保持同样的右侧留白，使正文中轴一致 */
+				.layout-wrapper::after {
+					content: '';
+					width: 260px;
+					flex-shrink: 0;
+				}
+				.layout-wrapper main {
+					flex: 1 1 720px;
+					min-width: 0;
+					max-width: 720px;
+					margin: 0;
+				}
+			}
+			@media (max-width: 1100px) {
+				.layout-wrapper {
+					display: flex;
+					flex-direction: column;
+					padding-top: 4rem;
+				}
+				.layout-wrapper::after {
+					display: none;
+				}
+			}
+			main {
+				width: 720px;
+			}
+			.error-card {
+				padding: 3em 2em;
+				border: 1px solid var(--glass-border);
+				border-radius: 16px;
+				background: var(--glass-bg);
+				backdrop-filter: blur(var(--glass-blur));
+				-webkit-backdrop-filter: blur(var(--glass-blur));
+				text-align: center;
+			}
+			.error-code {
+				font-size: 4.5rem;
+				font-weight: 700;
+				line-height: 1;
+				letter-spacing: 0.06em;
+				color: var(--accent);
+				text-shadow: 0 0 28px rgb(var(--accent-rgb) / 0.5);
+			}
+			.error-card h1 {
+				margin: 1.1rem 0 0;
+				font-size: 1.5rem;
+				color: rgb(var(--black));
+			}
+			.error-card .error-desc {
+				margin: 0.6rem 0 0;
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+			}
+			.btn-group {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 0.8em;
+				margin-top: 1.8em;
+			}
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				padding: 0.65em 1.6em;
+				border-radius: 10px;
+				font-size: 0.95rem;
+				font-weight: 700;
+				text-decoration: none;
+				transition:
+					background 0.2s,
+					color 0.2s,
+					border-color 0.2s,
+					box-shadow 0.2s;
+			}
+			.btn-primary {
+				background: var(--accent);
+				color: #fff;
+			}
+			.btn-primary:hover {
+				color: #fff;
+				box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.5);
+			}
+			.btn-ghost {
+				border: 1px solid var(--glass-border);
+				background: rgb(var(--glass-text) / 0.06);
+				color: rgb(var(--glass-text));
+			}
+			.btn-ghost:hover {
+				color: rgb(var(--black));
+				border-color: rgb(var(--accent-rgb) / 0.5);
+				background: rgb(var(--accent-rgb) / 0.12);
+			}
+			.error-links {
+				margin: 2em 0 0;
+				font-size: 0.82rem;
+				color: rgb(var(--gray));
+			}
+			.error-links a {
+				color: rgb(var(--glass-text));
+				text-decoration: none;
+			}
+			.error-links a:hover {
+				color: var(--accent-dark);
+			}
+		</style>
+	</head>
+	<body class="post-layout">
+		<SideBackground />
+		<Header />
+		<div class="layout-wrapper">
+			<Sidebar />
+		<main>
+			<div class="error-card">
+				<div class="error-code">404</div>
+				<h1>页面走丢了</h1>
+				<p class="error-desc">你访问的页面不存在，或者已经被移动、删除了。</p>
+				<div class="btn-group">
+					<a class="btn btn-primary" href="/">返回首页</a>
+					<a class="btn btn-ghost" href="javascript:history.back()">返回上一页</a>
+				</div>
+				<p class="error-links">
+					也可以看看：<a href="/blog">博客</a> · <a href="/notes">笔记</a> · <a href="/share">分享</a> · <a href="/tags">标签</a>
+				</p>
+			</div>
+		</main>
+		</div>
+		<Footer />
+	</body>
+</html>
