@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { render } from 'astro:content';
+import { createCoverMapper } from '../../lib/cover';
 
 export async function getStaticPaths() {
 	const shares = await getCollection('shares');
@@ -14,8 +15,9 @@ type Props = CollectionEntry<'shares'>;
 
 const share = Astro.props;
 const { Content, headings } = await render(share);
+const coverFor = await createCoverMapper();
 ---
 
-<BlogPost {...share.data} headings={headings}>
+<BlogPost {...share.data} heroImage={coverFor(share)} headings={headings}>
 	<Content />
 </BlogPost>

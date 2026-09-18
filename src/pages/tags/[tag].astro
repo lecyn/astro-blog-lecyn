@@ -9,6 +9,7 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import TagList from '../../components/TagList.astro';
 import TagCloud from '../../components/TagCloud.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { createCoverMapper } from '../../lib/cover';
 import { COLLECTION_LABELS, entryHref, getAllTags, getEntriesByTag } from '../../lib/tags';
 
 export async function getStaticPaths() {
@@ -21,6 +22,7 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.props;
 const entries = await getEntriesByTag(tag);
+const coverFor = await createCoverMapper();
 
 const pageTitle = `标签：${tag} - ${SITE_TITLE}`;
 const pageDescription = `带有「${tag}」标签的全部内容，共 ${entries.length} 篇 — ${SITE_DESCRIPTION}`;
@@ -191,7 +193,7 @@ const pageDescription = `带有「${tag}」标签的全部内容，共 ${entries
 											<img
 												width={560}
 												height={300}
-												src={entry.data.heroImage}
+												src={coverFor(entry)}
 												alt={entry.data.title}
 											/>
 										</div>

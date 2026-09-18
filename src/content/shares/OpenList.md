@@ -1,8 +1,7 @@
 ---
 title: "OpenList Windows 安装与使用文档"
 description: "在 Windows 上安装、启动并配置 OpenList 的图文教程。"
-pubDate: "Jul 22 2026"
-heroImage: "https://t.alcy.cc/pc"
+pubDate: "Sept 18 2026"
 tags: ["tool", "drive"]
 ---
 

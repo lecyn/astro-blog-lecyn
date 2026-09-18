@@ -2,7 +2,6 @@
 title: "移动宽带光猫—获取超级管理员密码教程"
 description: "这篇教程详细说明了如何获取并修改中国移动光猫的超级管理员密码。"
 pubDate: "Aug 7 2026"
-heroImage: "https://t.alcy.cc/pc"
 tags: ["network"]
 ---
 

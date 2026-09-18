@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { render } from 'astro:content';
+import { createCoverMapper } from '../../lib/cover';
 
 export async function getStaticPaths() {
 	const notes = await getCollection('notes');
@@ -14,8 +15,9 @@ type Props = CollectionEntry<'notes'>;
 
 const note = Astro.props;
 const { Content, headings } = await render(note);
+const coverFor = await createCoverMapper();
 ---
 
-<BlogPost {...note.data} headings={headings}>
+<BlogPost {...note.data} heroImage={coverFor(note)} headings={headings}>
 	<Content />
 </BlogPost>

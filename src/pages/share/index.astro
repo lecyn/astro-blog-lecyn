@@ -10,10 +10,13 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 import TagList from '../../components/TagList.astro';
 import TagCloud from '../../components/TagCloud.astro';
+import { createCoverMapper } from '../../lib/cover';
 
 const shares = (await getCollection('shares')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const coverFor = await createCoverMapper();
 
 const pageTitle = `分享 - ${SITE_TITLE}`;
 const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`;
@@ -177,7 +180,7 @@ const pageDescription = `好文、工具与资源分享 — ${SITE_DESCRIPTION}`
 							<li>
 								<a href={`/share/${share.id}/`}>
 									<div class="img-wrapper">
-										<img width={560} height={300} src={share.data.heroImage} alt={share.data.title} />
+										<img width={560} height={300} src={coverFor(share)} alt={share.data.title} />
 									</div>
 									<div class="card-info">
 										<h4 class="title">{share.data.title}</h4>

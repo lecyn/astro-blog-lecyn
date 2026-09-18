@@ -12,7 +12,6 @@ const blog = defineCollection({
 		// Transform string to Date object
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
 		// 标签：一律使用英文单词（小写、多词用连字符）
 		tags: z.array(z.string()).default([]),
 	}),
@@ -25,7 +24,6 @@ const notes = defineCollection({
 		description: z.string(),
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
 		tags: z.array(z.string()).default([]),
 	}),
 });
@@ -37,7 +35,6 @@ const shares = defineCollection({
 		description: z.string(),
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
 		tags: z.array(z.string()).default([]),
 	}),
 });

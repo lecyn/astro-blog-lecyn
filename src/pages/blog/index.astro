@@ -10,10 +10,13 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 import TagList from '../../components/TagList.astro';
 import TagCloud from '../../components/TagCloud.astro';
+import { createCoverMapper } from '../../lib/cover';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const coverFor = await createCoverMapper();
 
 const pageTitle = `博客 - ${SITE_TITLE}`;
 const pageDescription = `技术博文列表 — ${SITE_DESCRIPTION}`;
@@ -179,7 +182,7 @@ const pageDescription = `技术博文列表 — ${SITE_DESCRIPTION}`;
 							<li>
 								<a href={`/blog/${post.id}/`}>
 									<div class="img-wrapper">
-										<img width={560} height={300} src={post.data.heroImage} alt={post.data.title} />
+										<img width={560} height={300} src={coverFor(post)} alt={post.data.title} />
 									</div>
 									<div class="card-info">
 										<h4 class="title">{post.data.title}</h4>

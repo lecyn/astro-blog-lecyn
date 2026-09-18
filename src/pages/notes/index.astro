@@ -10,10 +10,13 @@ import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 import TagList from '../../components/TagList.astro';
 import TagCloud from '../../components/TagCloud.astro';
+import { createCoverMapper } from '../../lib/cover';
 
 const notes = (await getCollection('notes')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const coverFor = await createCoverMapper();
 
 const pageTitle = `笔记 - ${SITE_TITLE}`;
 const pageDescription = `学习笔记与代码片段 — ${SITE_DESCRIPTION}`;
@@ -177,7 +180,7 @@ const pageDescription = `学习笔记与代码片段 — ${SITE_DESCRIPTION}`;
 							<li>
 								<a href={`/notes/${note.id}/`}>
 									<div class="img-wrapper">
-										<img width={560} height={300} src={note.data.heroImage} alt={note.data.title} />
+										<img width={560} height={300} src={coverFor(note)} alt={note.data.title} />
 									</div>
 									<div class="card-info">
 										<h4 class="title">{note.data.title}</h4>
